@@ -15,10 +15,29 @@ import {
   ROLES,
   WHY,
 } from "@/lib/data";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/assets/logos/genesis.png`,
+  description: SITE_DESCRIPTION,
+  email: CONTACT_EMAIL,
+  telephone: "+92 333 5104077",
+  address: { "@type": "PostalAddress", addressLocality: "Islamabad", addressCountry: "PK" },
+  founder: { "@type": "Person", name: "Syed Haider Ali", jobTitle: "Founder & Chairman" },
+  sameAs: [INSTAGRAM_URL],
+};
 
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD).replace(/</g, "\\u003c") }}
+      />
       <Nav />
       <FlightHero />
 
@@ -130,19 +149,17 @@ export default function Home() {
           <div className="rolegrid">
             {ROLES.map((r) => (
               <div key={r.org} className="role rv">
-                <div className="logo">{r.logo}</div>
+                <div className="logo">{r.logoSrc ? <img src={r.logoSrc} alt={r.logo} /> : r.org.replace(/ \(PVT\.\) LTD\./, "")}</div>
                 <span className="org">{r.org}</span>
                 <h3>{r.title}</h3>
                 <p>{r.text}</p>
-                <div className="acts">
-                  {r.links.map((l) =>
-                    "href" in l ? (
+                {r.links.length > 0 && (
+                  <div className="acts">
+                    {r.links.map((l) => (
                       <a key={l.label} href={l.href} target="_blank" rel="noopener">{l.label}</a>
-                    ) : (
-                      <a key={l.label} href="#" aria-disabled="true">{l.label}</a>
-                    )
-                  )}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -162,7 +179,11 @@ export default function Home() {
             ))}
           </div>
           <div className="formula glass rv">
-            <span>Experience</span><i>+</i><span>Expertise</span><i>+</i><span>International Network</span><i>+</i><span>Business Connections</span><i>=</i><span style={{ color: "var(--sky)" }}>Practical Solutions &amp; Opportunities</span>
+            <span>Experience</span>
+            <span className="t"><i>+</i>Expertise</span>
+            <span className="t"><i>+</i>International Network</span>
+            <span className="t"><i>+</i>Business Connections</span>
+            <span className="t"><i>=</i><span style={{ color: "var(--sky)" }}>Practical Solutions &amp; Opportunities</span></span>
           </div>
         </div>
       </section>
@@ -190,7 +211,14 @@ export default function Home() {
             </div>
           </div>
           <footer>
-            <span>© 2026 Genesis AS · Aviation | Business Solutions | International Opportunities</span>
+            <span>
+              © 2026 Genesis AS · Aviation | Business Solutions | International Opportunities
+              <br />
+              <span className="credit">
+                Powered by{" "}
+                <a href="https://www.cyfersolutions.io/" target="_blank" rel="noopener">Cyfer Solutions</a>
+              </span>
+            </span>
             <span className="social">
               <a href={WHATSAPP_URL} target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9l-5.05.9" /><path d="M9 10a.5.5 0 0 0 1 0v-1a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" /></svg>
